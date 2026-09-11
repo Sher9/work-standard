@@ -1,8 +1,5 @@
-# Git Worktree 使用指南(本项目实战)
+# Git Worktree 使用指南
 
-> 以 `work-standard`(金融知识库)为例,介绍 Git Worktree 的常用操作:
-> 创建、提交、合并到 `main`,以及并行开发、Code Review、清理等其他常见用法。
->
 > **本项目约定:所有代码修改都在 `worktrees/` 目录下的 worktree 中进行,主仓库(`main`)只负责合并与发布。**
 
 ---
@@ -118,7 +115,7 @@ git commit -m "feat(login): 完善登录页样式"
 
 - 提交归属 `login` 分支,**不影响**主仓库的 `main`
 - 每个 worktree 有独立的 `node_modules`,首次使用需各自安装依赖:
-  `cd frontend && npm install`、`cd backend && npm install`
+`cd frontend && npm install`、`cd backend && npm install`
 - `git status` 显示的路径**相对当前所在目录**:比如在 `backend/` 下会看到 `../frontend/...`
 
 ## 6. 合并到 main 分支
@@ -205,30 +202,34 @@ git worktree prune                    # 清理 .git/worktrees/ 下已失效的�
 
 ## 9. 本项目常见的坑与最佳实践
 
-| 现象 | 说明 / 解决 |
-| --- | --- |
-| `fatal: 'login' is already checked out at '...'` | 一个分支同一时刻只能在一个 worktree 检出。先 `git worktree remove`,或到对应目录操作 |
-| 主仓库 `git status` 出现 `?? worktrees/` | `worktrees/` **未被 `.gitignore` 忽略**,主仓库视角下它是未跟踪目录。**不要在主仓库执行 `git add -A` / `git add worktrees/`**,否则会把整个 worktree(含源码副本)误提交进去。建议在 `.gitignore` 增加 `worktrees/`,或把 worktree 放到仓库目录之外 |
-| stash 是全局共享的 | 所有 worktree 共用同一个 stash 栈。**不要用裸 `git stash pop`**,建议用带唯一标签的 `git stash push -u -m "<标签>"`,恢复时用 `git stash apply <sha>` |
-| 找不到前端/后端依赖 | 每个 worktree 独立,需各自 `npm install` |
-| `git status` 路径很奇怪(如 `../frontend/...`) | 路径是相对当前目录显示的,属正常现象;在仓库根目录操作路径最直观 |
-| 合并操作报错找不到 main | 确认在**主仓库**(而非 worktree)里执行,并先 `git checkout main` |
-| 并行运行写操作 | 不要在同一时间在不同 worktree 里并行 rebase / merge / gc,避免引用竞争 |
+
+| 现象                                               | 说明 / 解决                                                                                                                                                                              |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `fatal: 'login' is already checked out at '...'` | 一个分支同一时刻只能在一个 worktree 检出。先 `git worktree remove`,或到对应目录操作                                                                                                                           |
+| 主仓库 `git status` 出现 `?? worktrees/`              | `worktrees/` **未被 `.gitignore` 忽略**,主仓库视角下它是未跟踪目录。**不要在主仓库执行 `git add -A` / `git add worktrees/`**,否则会把整个 worktree(含源码副本)误提交进去。建议在 `.gitignore` 增加 `worktrees/`,或把 worktree 放到仓库目录之外 |
+| stash 是全局共享的                                     | 所有 worktree 共用同一个 stash 栈。**不要用裸 `git stash pop`**,建议用带唯一标签的 `git stash push -u -m "<标签>"`,恢复时用 `git stash apply <sha>`                                                              |
+| 找不到前端/后端依赖                                       | 每个 worktree 独立,需各自 `npm install`                                                                                                                                                     |
+| `git status` 路径很奇怪(如 `../frontend/...`)          | 路径是相对当前目录显示的,属正常现象;在仓库根目录操作路径最直观                                                                                                                                                     |
+| 合并操作报错找不到 main                                   | 确认在**主仓库**(而非 worktree)里执行,并先 `git checkout main`                                                                                                                                    |
+| 并行运行写操作                                          | 不要在同一时间在不同 worktree 里并行 rebase / merge / gc,避免引用竞争                                                                                                                                   |
+
 
 ## 10. 命令速查表
 
-| 命令 | 说明 |
-| --- | --- |
-| `git worktree list` | 列出全部 worktree 及分支 |
-| `git worktree add <path>` | 添加 worktree(基于当前分支) |
-| `git worktree add -b <branch> <path> [base]` | 新建分支并检出到新 worktree |
-| `git worktree remove <path>` | 移除 worktree(`--force` 强制) |
-| `git worktree prune` | 清理失效的 worktree 记录 |
-| `git worktree lock / unlock <path>` | 锁定 / 解锁 worktree |
-| `git worktree move <path> <new>` | 移动 worktree 目录 |
-| `git branch -d <name>` | 删除已合并分支(配合清理) |
-| `git merge <branch>` | 把分支合并进当前分支 |
-| `git push origin <branch>` | 推送分支到远端 |
+
+| 命令                                           | 说明                        |
+| -------------------------------------------- | ------------------------- |
+| `git worktree list`                          | 列出全部 worktree 及分支         |
+| `git worktree add <path>`                    | 添加 worktree(基于当前分支)       |
+| `git worktree add -b <branch> <path> [base]` | 新建分支并检出到新 worktree        |
+| `git worktree remove <path>`                 | 移除 worktree(`--force` 强制) |
+| `git worktree prune`                         | 清理失效的 worktree 记录         |
+| `git worktree lock / unlock <path>`          | 锁定 / 解锁 worktree          |
+| `git worktree move <path> <new>`             | 移动 worktree 目录            |
+| `git branch -d <name>`                       | 删除已合并分支(配合清理)             |
+| `git merge <branch>`                         | 把分支合并进当前分支                |
+| `git push origin <branch>`                   | 推送分支到远端                   |
+
 
 ---
 
