@@ -75,11 +75,13 @@ cd D:/work/agent/work-standard
 git worktree add --detach worktrees/login main
 ```
 
-
-**4.2 worktree**
+**4.2 拿到worktree提交id**
 
 ```bash
-git rev-parse HEAD                               # 记下 sha，比如 a1b2c3d
+# cd 到worktrees/test目录下
+git rev-parse HEAD  
+#不进入worktree目录下
+git -C worktrees/test rev-parse HEAD                     
 ```
 
 **4.3 切换到主分支后 cherry-pick worttree上面代码**
