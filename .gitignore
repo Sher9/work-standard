@@ -24,6 +24,9 @@ uploads/
 backend/uploads/
 frontend/uploads/
 
+# Git Worktree（见 git-worktree.md：工作树是完整副本，禁止提交进主仓库）
+worktrees/
+
 # 测试临时文件
 vitest-err.txt
 vitest-out.txt

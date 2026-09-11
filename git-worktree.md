@@ -2,27 +2,10 @@
 
 > **本项目约定:所有代码修改都在 `worktrees/` 目录下的 worktree 中进行,主仓库(`main`)只负责合并与发布。**
 
----
-
-## 目录
-
-1. [本项目的 worktree 布局](#1-本项目的-worktree-布局)
-2. [什么是 Git Worktree](#2-什么是-git-worktree)
-3. [为什么使用 Worktree](#3-为什么使用-worktree)
-4. [创建 worktree](#4-创建-worktree)
-5. [在 worktree 中开发与提交](#5-在-worktree-中开发与提交)
-6. [合并到 main 分支](#6-合并到-main-分支)
-7. [其他常用用法](#7-其他常用用法)
-8. [清理 worktree 与分支](#8-清理-worktree-与分支)
-9. [本项目常见的坑与最佳实践](#9-本项目常见的坑与最佳实践)
-10. [命令速查表](#10-命令速查表)
-
----
-
 ## 1. 本项目的 worktree 布局
 
 ```text
-D:/work/agent/work-standard/                 # 主仓库,检出 main
+work-standard/                 # 主仓库,检出 main
 ├── .git/
 │   └── worktrees/login/                     # 附加 worktree 的元数据
 ├── AGENTS.md
@@ -31,7 +14,7 @@ D:/work/agent/work-standard/                 # 主仓库,检出 main
 ├── openspec/
 └── worktrees/
     └── login/                               # 附加 worktree,检出 login 分支
-        ├── .git                             # 文本文件:gitdir: D:/work/agent/work-standard/.git/worktrees/login
+        ├── .git                             
         ├── frontend/                        # 完整的项目副本
         ├── backend/
         └── ...
@@ -43,8 +26,6 @@ D:/work/agent/work-standard/                 # 主仓库,检出 main
 
 ```bash
 git worktree list
-# D:/work/agent/work-standard                 f9ed751 [main]
-# D:/work/agent/work-standard/worktrees/login  f9ed751 [login]
 ```
 
 ## 2. 什么是 Git Worktree
@@ -63,19 +44,24 @@ Git Worktree 允许你在**同一个仓库**里同时检出**多个分支到多�
 
 ## 4. 创建 worktree
 
-在主仓库根目录下执行:
-
-```bash
-cd D:/work/agent/work-standard
-```
-
 **4.1 从 main 新建功能分支并创建 worktree(最常用)**
 
 ```bash
 git worktree add --detach worktrees/login main
 ```
+## 4.2 在 worktree 中开发与提交
 
-**4.2 拿到worktree提交id**
+worktree 内与普通仓库**完全一样**,`git add` / `git commit` / `git status` 均可:
+
+```bash
+cd worktrees/login
+
+git status                       # 查看改动(路径相对当前目录)
+git add frontend/src/views/LoginView.vue  #多个文件 git add .
+git commit -m "feat(login): 完善登录页样式"
+```
+
+**4.3 拿到worktree提交id**
 
 ```bash
 # cd 到worktrees/test目录下
@@ -84,73 +70,28 @@ git rev-parse HEAD
 git -C worktrees/test rev-parse HEAD                     
 ```
 
-**4.3 切换到主分支后 cherry-pick worttree上面代码**
+**4.4 切换到主分支后 cherry-pick worttree上面代码**
 
 ```bash
 git cherry-pick a1b2c3d  
 ```
 
-**4.4 主版本推送**
+**4.5 主版本推送**
 
 ```bash
 git push
 ```
 
-> 目标路径必须**不存在或为空**,否则需要 `-f`。
-
-## 5. 在 worktree 中开发与提交
-
-worktree 内与普通仓库**完全一样**,`git add` / `git commit` / `git status` 均可:
+**4.6 删除worktree工作区**
 
 ```bash
-cd D:/work/agent/work-standard/worktrees/login
-
-git status                       # 查看改动(路径相对当前目录)
-git add frontend/src/views/LoginView.vue
-git commit -m "feat(login): 完善登录页样式"
+git worktree remove worktrees/login
 ```
 
-注意:
 
-- 提交归属 `login` 分支,**不影响**主仓库的 `main`
-- 每个 worktree 有独立的 `node_modules`,首次使用需各自安装依赖:
-`cd frontend && npm install`、`cd backend && npm install`
-- `git status` 显示的路径**相对当前所在目录**:比如在 `backend/` 下会看到 `../frontend/...`
+## 5. 其他常用用法
 
-## 6. 合并到 main 分支
-
-合并操作要在**另一个 worktree** 里做——因为 `login` 分支正被 `worktrees/login` 占用,无法在它内部切到 `main`。主仓库检出的是 `main`,正好用它来合并。
-
-**6.1 本地合并(推荐)**
-
-```bash
-cd D:/work/agent/work-standard   # 主仓库
-git checkout main                # 确保在 main
-git pull --rebase origin main    # 先同步远端(可选但建议)
-git merge login                  # 把 login 分支合并进 main
-git push origin main             # 推送远端(推送前请确认)
-```
-
-**6.2 通过远端 Pull Request**
-
-```bash
-cd D:/work/agent/work-standard/worktrees/login
-git push -u origin login         # 推送功能分支
-# 在 GitHub 上创建 PR:login → main
-# 合并后按 §8 清理本地 worktree 与分支
-```
-
-**6.3 只需要并入一次(如 hotfix),压成单个提交**
-
-```bash
-git merge --squash login
-```
-
-> 分支名/目录名冲突处理:`git merge` 遇到冲突时,解决冲突、`git add` 后执行 `git commit` 完成合并。
-
-## 7. 其他常用用法
-
-**7.1 并行开发多个功能**
+**5.1 并行开发多个功能**
 
 ```bash
 cd D:/work/agent/work-standard
@@ -158,7 +99,7 @@ git worktree add -b login     worktrees/login     main
 git worktree add -b favorites worktrees/favorites main
 ```
 
-**7.2 Code Review:把 PR 分支拉成独立工作树**
+**5.2 Code Review:把 PR 分支拉成独立工作树**
 
 ```bash
 git worktree add worktrees/pr-review origin/feature/pay
@@ -166,14 +107,14 @@ cd worktrees/pr-review
 npm test          # 独立跑该分支测试,不影响正在开发的分支
 ```
 
-**7.3 隔离实验 / 版本对比**
+**5.3 隔离实验 / 版本对比**
 
 ```bash
 git worktree add -b exp/v2 worktrees/exp-v2
 git worktree add -b exp/v1 worktrees/exp-v1 v1.0.0
 ```
 
-**7.4 锁定 / 解锁 / 移动 worktree**
+**5.4 锁定 / 解锁 / 移动 worktree**
 
 ```bash
 git worktree lock   worktrees/login -m "正在使用"   # 防止误删/移动
@@ -181,14 +122,14 @@ git worktree unlock worktrees/login
 git worktree move   worktrees/login ../worktrees/login-v2
 ```
 
-**7.5 查看 worktree 状态**
+**5.5 查看 worktree 状态**
 
 ```bash
 git worktree list
 git worktree list --porcelain   # 脚本友好输出
 ```
 
-## 8. 清理 worktree 与分支
+## 5.6. 清理 worktree 与分支
 
 ```bash
 cd D:/work/agent/work-standard
@@ -199,7 +140,7 @@ git worktree prune                    # 清理 .git/worktrees/ 下已失效的�
 
 > `git worktree remove` 无法在主工作树内部移除主工作树本身;目录被手动删除后,残留元数据用 `git worktree prune` 清理。
 
-## 9. 本项目常见的坑与最佳实践
+## 6. 本项目常见的坑与最佳实践
 
 
 | 现象                                               | 说明 / 解决                                                                                                                                                                              |
@@ -213,7 +154,7 @@ git worktree prune                    # 清理 .git/worktrees/ 下已失效的�
 | 并行运行写操作                                          | 不要在同一时间在不同 worktree 里并行 rebase / merge / gc,避免引用竞争                                                                                                                                   |
 
 
-## 10. 命令速查表
+## 7. 命令速查表
 
 
 | 命令                                           | 说明                        |
