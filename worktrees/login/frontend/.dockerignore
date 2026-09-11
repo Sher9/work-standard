@@ -1,8 +1,0 @@
-node_modules
-dist
-*.log
-doc
-vitest-err.txt
-vitest-out.txt
-.git
-.gitignore
