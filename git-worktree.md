@@ -72,29 +72,26 @@ cd D:/work/agent/work-standard
 **4.1 从 main 新建功能分支并创建 worktree(最常用)**
 
 ```bash
-git worktree add -b login worktrees/login main
+git worktree add --detach worktrees/login main
 ```
 
-- `-b login`:基于基点新建并检出 `login` 分支
-- `worktrees/login`:worktree 目录(相对主仓库;也可用绝对路径 `D:/work/agent/work-standard/worktrees/login`)
-- `main`:基点分支(基于 main 当前提交)
 
-**4.2 已存在的分支,直接挂载到 worktree**
+**4.2 worktree**
 
 ```bash
-git worktree add worktrees/hotfix hotfix-1.2.x
+git rev-parse HEAD                               # 记下 sha，比如 a1b2c3d
 ```
 
-**4.3 基于远端分支创建**
+**4.3 切换到主分支后 cherry-pick worttree上面代码**
 
 ```bash
-git worktree add --track -b login worktrees/login origin/login
+git cherry-pick a1b2c3d  
 ```
 
-**4.4 分支已被别的 worktree 检出、或目录非空时,强制挂载**
+**4.4 主版本推送**
 
 ```bash
-git worktree add -f worktrees/login login
+git push
 ```
 
 > 目标路径必须**不存在或为空**,否则需要 `-f`。
