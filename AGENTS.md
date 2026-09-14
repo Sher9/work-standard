@@ -139,11 +139,13 @@ openspec archive <name> --yes       # 归档
 5. **不要提交 `uploads/` 与 `.env` 中的真实凭据**。
 6. 新功能必须有 Vitest 测试；后端放 `backend/test/<module>/`，前端放同目录 `__tests__/`。
 7. 注释与文档使用**简体中文**。
+8. **worktree 清理纪律**:删除 worktree 前先停掉其目录内运行的 dev server / 进程,并关闭停在其中的终端、IDE(如 CodeBuddy);禁止 `git add` 含 `.git` 的嵌套目录(会被误记为 gitlink 160000)。详见 [`git-worktree.md`](git-worktree.md)。
 
 ## 8. 文档地图
 
 | 文档 | 用途 |
 | --- | --- |
+| [`git-worktree.md`](git-worktree.md) | Git Worktree 使用指南（布局、创建、清理、Windows 踩坑） |
 | [`backend/doc/API_INVENTORY.md`](backend/doc/API_INVENTORY.md) | 全量接口清单（改接口先看这里） |
 | [`backend/doc/ARCHITECTURE.md`](backend/doc/ARCHITECTURE.md) | 分层、模块职责、数据流 |
 | [`backend/doc/CONVENTIONS.md`](backend/doc/CONVENTIONS.md) | 命名、错误处理、SQL、测试规范 |
