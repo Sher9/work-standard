@@ -1,16 +1,18 @@
-# work-standard
+# work-standard1
 
 面向金融机构内部使用的**知识库管理系统**：按分类树组织文档，支持富文本内容与 PDF 附件、文档状态审核流转、版本留痕、收藏与检索。
 
 ## 功能概览
 
-| 模块 | 说明 |
-| --- | --- |
-| 分类管理 | 树形分类，支持拖拽排序与自定义图标 |
+
+| 模块   | 说明                      |
+| ---- | ----------------------- |
+| 分类管理 | 树形分类，支持拖拽排序与自定义图标       |
 | 文档管理 | 富文本内容 + PDF 附件上传，支持版本留痕 |
-| 状态流转 | 草稿 → 待审 → 通过/驳回等审核流程 |
-| 检索 | 按标题/内容/分类检索文档 |
-| 收藏 | 普通用户收藏常用文档 |
+| 状态流转 | 草稿 → 待审 → 通过/驳回等审核流程    |
+| 检索   | 按标题/内容/分类检索文档           |
+| 收藏   | 普通用户收藏常用文档              |
+
 
 两种角色：
 
@@ -19,12 +21,14 @@
 
 ## 技术栈
 
-| 层 | 技术 |
-| --- | --- |
-| 前端 | Vue 3（`<script setup>` + TS）· Vite 5 · Pinia · Vue Router 4 · Element Plus · Vitest |
-| 后端 | Node.js · TypeScript（CommonJS）· Express 5 · pg（原生 SQL）· Vitest |
-| 数据库 | PostgreSQL 16 |
-| 规范流程 | OpenSpec |
+
+| 层    | 技术                                                                                  |
+| ---- | ----------------------------------------------------------------------------------- |
+| 前端   | Vue 3（`<script setup>` + TS）· Vite 5 · Pinia · Vue Router 4 · Element Plus · Vitest |
+| 后端   | Node.js · TypeScript（CommonJS）· Express 5 · pg（原生 SQL）· Vitest                      |
+| 数据库  | PostgreSQL 16                                                                       |
+| 规范流程 | OpenSpec                                                                            |
+
 
 无 ORM、无查询构造器，所有数据访问都是 `pool.query` 手写 SQL。
 
@@ -55,7 +59,7 @@ work-standard/
 docker compose up -d
 ```
 
-启动后：前端 <http://localhost:5173>，后端 <http://localhost:3000>。
+启动后：前端 [http://localhost:5173](http://localhost:5173)，后端 [http://localhost:3000](http://localhost:3000)。
 
 ### 方式二：本地开发
 
@@ -77,10 +81,12 @@ npm run dev            # vite :5173
 
 ### 演示账号
 
-| 工号 | 密码 | 角色 |
-| --- | --- | --- |
+
+| 工号       | 密码         | 角色    |
+| -------- | ---------- | ----- |
 | `E10001` | `admin123` | admin |
-| `E10002` | `user123` | user |
+| `E10002` | `user123`  | user  |
+
 
 ## 常用命令
 
@@ -125,31 +131,36 @@ git worktree add -b login worktrees/login main
 
 ## 文档地图
 
-| 文档 | 用途 |
-| --- | --- |
-| [AGENTS.md](AGENTS.md) | AI 编码助手必读的全局约定与 OpenSpec 流程 |
-| [git-worktree.md](git-worktree.md) | Git Worktree 完整使用指南 |
-| [backend/doc/INDEX.md](backend/doc/INDEX.md) | 后端文档总入口 |
-| [frontend/doc/INDEX.md](frontend/doc/INDEX.md) | 前端文档总入口 |
-| [backend/doc/API_INVENTORY.md](backend/doc/API_INVENTORY.md) | 全量接口清单 |
-| [backend/doc/ARCHITECTURE.md](backend/doc/ARCHITECTURE.md) | 后端分层、模块职责、数据流 |
-| [backend/doc/CONVENTIONS.md](backend/doc/CONVENTIONS.md) | 后端命名、错误处理、SQL、测试规范 |
-| [backend/doc/PLAYBOOK.md](backend/doc/PLAYBOOK.md) | 后端常见开发任务处方 |
-| [backend/doc/SETUP.md](backend/doc/SETUP.md) | 后端安装、启动、环境变量 |
-| [frontend/doc/API_INVENTORY.md](frontend/doc/API_INVENTORY.md) | 前端调用契约与错误码处理 |
-| [frontend/doc/ARCHITECTURE.md](frontend/doc/ARCHITECTURE.md) | 前端目录分层、路由守卫、状态管理 |
-| [frontend/doc/CONVENTIONS.md](frontend/doc/CONVENTIONS.md) | 前端组件、命名、样式、测试规范 |
-| [frontend/doc/PLAYBOOK.md](frontend/doc/PLAYBOOK.md) | 前端常见开发任务处方 |
-| [frontend/doc/SETUP.md](frontend/doc/SETUP.md) | 前端安装、启动、环境变量、代理 |
+
+| 文档                                                             | 用途                          |
+| -------------------------------------------------------------- | --------------------------- |
+| [AGENTS.md](AGENTS.md)                                         | AI 编码助手必读的全局约定与 OpenSpec 流程 |
+| [git-worktree.md](git-worktree.md)                             | Git Worktree 完整使用指南         |
+| [backend/doc/INDEX.md](backend/doc/INDEX.md)                   | 后端文档总入口                     |
+| [frontend/doc/INDEX.md](frontend/doc/INDEX.md)                 | 前端文档总入口                     |
+| [backend/doc/API_INVENTORY.md](backend/doc/API_INVENTORY.md)   | 全量接口清单                      |
+| [backend/doc/ARCHITECTURE.md](backend/doc/ARCHITECTURE.md)     | 后端分层、模块职责、数据流               |
+| [backend/doc/CONVENTIONS.md](backend/doc/CONVENTIONS.md)       | 后端命名、错误处理、SQL、测试规范          |
+| [backend/doc/PLAYBOOK.md](backend/doc/PLAYBOOK.md)             | 后端常见开发任务处方                  |
+| [backend/doc/SETUP.md](backend/doc/SETUP.md)                   | 后端安装、启动、环境变量                |
+| [frontend/doc/API_INVENTORY.md](frontend/doc/API_INVENTORY.md) | 前端调用契约与错误码处理                |
+| [frontend/doc/ARCHITECTURE.md](frontend/doc/ARCHITECTURE.md)   | 前端目录分层、路由守卫、状态管理            |
+| [frontend/doc/CONVENTIONS.md](frontend/doc/CONVENTIONS.md)     | 前端组件、命名、样式、测试规范             |
+| [frontend/doc/PLAYBOOK.md](frontend/doc/PLAYBOOK.md)           | 前端常见开发任务处方                  |
+| [frontend/doc/SETUP.md](frontend/doc/SETUP.md)                 | 前端安装、启动、环境变量、代理             |
+
 
 ## 环境变量
 
 后端支持 `.env` 配置（参考 `backend/.env.example`）：
 
-| 变量 | 说明 | 默认值 |
-| --- | --- | --- |
-| `PORT` | 后端监听端口 | `3000` |
+
+| 变量             | 说明             | 默认值                                   |
+| -------------- | -------------- | ------------------------------------- |
+| `PORT`         | 后端监听端口         | `3000`                                |
 | `DATABASE_URL` | PostgreSQL 连接串 | 见 `backend/.env.example`（默认注释，按需取消注释） |
-| `JWT_SECRET` | JWT 签名密钥 | 见 `backend/.env.example`（默认注释，按需配置） |
+| `JWT_SECRET`   | JWT 签名密钥       | 见 `backend/.env.example`（默认注释，按需配置）   |
+
 
 > `.env` 与 `uploads/` 含真实凭据与用户文件，禁止提交。
+
